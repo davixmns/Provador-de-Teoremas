@@ -8,16 +8,11 @@ public class FBF {
     private List<String> arrayDaFormula;
     private List<String> simbolos;
 
-    public FBF(String formulaRecebida) {
+    public boolean verificaFbf(String formulaRecebida) {
         this.arrayDaFormula = Arrays.asList(formulaRecebida.replaceAll(" ", "").split("(?!^ )"));
         this.simbolos = List.of("~", "^", "v", "➝", "↔");
-    }
 
-    public boolean verificaFbf() {
-        if (verificaParenteses() && verificaSimbolos()) {
-            return true;
-        }
-        return false;
+        return verificaParenteses() && verificaSimbolos();
     }
 
     public Boolean verificaParenteses() {
@@ -42,8 +37,6 @@ public class FBF {
         } else if (pilhaDeParentese.firstElement().equals("(") && pilhaDeParentese.lastElement().equals(")") && abrePrentese == fechaParentese) {
             confirmaParentese = true;
         }
-        ;
-
 
         return confirmaParentese;
     }
@@ -79,15 +72,12 @@ public class FBF {
             confirmaSimbolo = false;
         }
 
-
         return confirmaSimbolo;
     }
 
     public boolean verificaTipo(String caracter) {
-
         //Verifica se o caractere é um simbolo
-        if (this.simbolos.contains(caracter)) return true;
-        else return false;
+        return this.simbolos.contains(caracter);
     }
 
 }
