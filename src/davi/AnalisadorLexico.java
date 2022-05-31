@@ -3,10 +3,10 @@ package davi;
 import java.util.List;
 
 public class AnalisadorLexico {
-    private final List<String> listaDeInvalidos;
+    private final List<String> listaDeValidos;
 
     public AnalisadorLexico() {
-        this.listaDeInvalidos = List.of("~", "^", "v", "->", "<->");
+        this.listaDeValidos = List.of("~", "^", "v", "->", "<->");
     }
 
     public void verificarInvalidos(String linha){
@@ -15,7 +15,7 @@ public class AnalisadorLexico {
         System.out.print("Simbolos invalidos: ");
 
         for(String simbolo: simbolos){
-            if(!listaDeInvalidos.contains(simbolo))
+            if(!listaDeValidos.contains(simbolo))
                 System.out.print(simbolo + " ");
         }
     }
