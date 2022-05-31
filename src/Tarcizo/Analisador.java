@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Analisador {
+public class Analisador { //ANALISADOR LÉXICO
     List<String> listaDeSimbolos = List.of("~", "^", "v", "➝", "↔");
 
     public Boolean verificaExistencia(String recebido, List<String> lista) {

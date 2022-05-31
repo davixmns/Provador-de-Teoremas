@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-public class FBF {
+public class FBF { //ANALISADOR SINTÁTICO
     private List<String> arrayDaFormula;
     private List<String> simbolos;
 
