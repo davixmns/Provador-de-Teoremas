@@ -8,11 +8,12 @@ public class Analisador { //ANALISADOR LÉXICO
 
     public String contabilizaInvalidos(String simbolos) {
 
-        String[] simbolosRecebidos = simbolos.split("(?!^)");;
+        String[] simbolosRecebidos = simbolos.split("(?!^)");
+        ;
         List<String> simbolosInvalidos = new ArrayList<>();
 
         for (String i : simbolosRecebidos) {
-            if(!listaDeSimbolos.contains(i)) simbolosInvalidos.add(i);
+            if (!listaDeSimbolos.contains(i)) simbolosInvalidos.add(i);
         }
 
         return "Os simbolos invalidos sao: " + simbolosInvalidos;
