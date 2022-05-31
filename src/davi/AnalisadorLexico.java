@@ -13,6 +13,7 @@ public class AnalisadorLexico {
         String[] simbolos = linha.split(" ");
 
         System.out.print("Simbolos invalidos: ");
+
         for(String simbolo: simbolos){
             if(!listaDeInvalidos.contains(simbolo))
                 System.out.print(simbolo + " ");
