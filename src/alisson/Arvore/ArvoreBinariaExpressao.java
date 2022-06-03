@@ -3,77 +3,107 @@ package alisson.Arvore;
 * https://en.wikipedia.org/wiki/Binary_expression_tree
 * */
 
+import alisson.TabelaVerdade.TabelaVerdade;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
+
+import static alisson.Arvore.Conversor.infixToPostfix;
 
 public class ArvoreBinariaExpressao {
     private No raiz;
     private String lastOperacao;
-    private Integer lastOperador;
+    private Boolean lastOperador;
+    public Map<String, Boolean> variaveis;
 
     public ArvoreBinariaExpressao(String expressao) {
-        decompoemExpressao(expressao);
+        String expressaoPosFixa = infixToPostfix(expressao);
+        inicializaVariaveis(expressaoPosFixa);
+        decompoemExpressao(expressaoPosFixa);
     }
 
     public void decompoemExpressao(String expressaoPosfix) {
-        String caracteres[] = expressaoPosfix.split(" ");
-
         Stack<No> pilha = new Stack();
-        for (String c : caracteres) {
+
+        for (int i=0; i < expressaoPosfix.length(); i++) {
+            String c = String.valueOf(expressaoPosfix.charAt(i));
             boolean simbolo = isSimbolo(c);
             No no;
+
             if(!simbolo) {
-                Integer valor = Integer.parseInt(c.toString());
-                no = new No(valor, null, false);
+                no = new No(c, null, false);
                 pilha.push(no);
             }else {
                 no = new No(c, null, true);
-                No noDireita = pilha.pop();
-                No noEsquerda = pilha.pop();
-                noDireita.setPai(no);
-                noEsquerda.setPai(no);
-                no.setDireita(noDireita);
-                no.setEsquerda(noEsquerda);
-                System.out.printf("Criando novo nó pai: %s - esquerda %s - direita %s\n", no, noEsquerda, noDireita);
+                // Verifica se operação requer apenas 1 ou 2 operadores
+                if(c.equals("~")) {
+                    No noDireita = pilha.pop();
+                    no.setDireita(noDireita);
+                    noDireita.setPai(no);
+                }else {
+                    No noDireita = pilha.pop();
+                    No noEsquerda = pilha.pop();
+                    no.setDireita(noDireita);
+                    no.setEsquerda(noEsquerda);
+                    noDireita.setPai(no);
+                    noEsquerda.setPai(no);
+                }
+                //System.out.printf("Criando novo nó pai: %s - esquerda %s - direita %s\n", no, noEsquerda, noDireita);
                 pilha.push(no);
             }
         }
         raiz = pilha.pop();
     }
 
+    private void inicializaVariaveis(String expressaoPosFixa) {
+        this.variaveis = new HashMap<String, Boolean>();
+        int tamanho = expressaoPosFixa.length();
+        for(int i=0; i < tamanho; i++) {
+            String caractere = String.valueOf(expressaoPosFixa.charAt(i));
+            if(isSimbolo(caractere)) {continue;}
+
+            this.variaveis.put(caractere, null);
+        }
+    }
+
     private boolean isSimbolo(String caractere) {
-        return "+-*/".contains(caractere);
+        return "~^v➝↔".contains(caractere);
     }
 
     public void show() {
         inFixa(raiz);
     }
 
-    public Integer calcular() {
+    public Boolean calcular() {
         lastOperacao = null;
         lastOperador = null;
-        Integer resultado = calculaArvore(raiz);
+
+        Boolean resultado = calculaArvore(raiz);
         System.out.println(resultado);
         return resultado;
     }
 
-    public Integer calcularOperacao(Integer a, Integer b, String operacao) {
-        Integer resultado = null;
-        System.out.printf("Operacao: %d %s %d = ?\n", a, operacao, b);
-
+    public Boolean calcularOperacao(Boolean a, Boolean b, String operacao) {
+        Boolean resultado = null;
         switch (operacao){
-            case "+":
-                resultado = a + b;
+            case "~":
+                resultado = TabelaVerdade.nao(a);
                 break;
-            case "-":
-                resultado = a - b;
+            case "^":
+                resultado = TabelaVerdade.e(a, b);
                 break;
-            case "*":
-                resultado = a * b;
+            case "v":
+                resultado = TabelaVerdade.ou(a, b);
                 break;
-            case "/":
-                resultado = a / b;
+            case "➝":
+                resultado = TabelaVerdade.se(a, b);
+                break;
+            case "↔":
+                resultado = TabelaVerdade.apenaSe(a, b);
                 break;
         }
+        System.out.printf("Operacao: %b %s %b = %b\n", a, operacao, b, resultado);
         return resultado;
     }
 
@@ -85,25 +115,28 @@ public class ArvoreBinariaExpressao {
         }
     }
 
-    private Integer calculaArvore(No no) {
+    private Boolean calculaArvore(No no) {
         if (no != null) {
             calculaArvore(no.getEsquerda());
 
             if(no.isOperador()) {
                 lastOperacao = no.getValor().toString();
             }else {
+                String chave = no.getValor().toString();
+                Boolean valor = variaveis.get(chave);
+                //System.out.printf("Chave[%s] = %d\n", chave, valor);
                 if(lastOperador != null && lastOperacao != null) {
-                    Integer valor = Integer.parseInt(no.getValor().toString());
-                    Integer resultado = calcularOperacao(lastOperador, valor, lastOperacao);
+                    Boolean resultado = calcularOperacao(lastOperador, valor, lastOperacao);
 
                     lastOperacao = null;
                     lastOperador = resultado;
                 }else {
-                    lastOperador = Integer.parseInt(no.getValor().toString());
+                    lastOperador = valor;
                 }
             }
             calculaArvore(no.getDireita());
         }
         return lastOperador;
     }
+
 }
