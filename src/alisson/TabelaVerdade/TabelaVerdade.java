@@ -15,17 +15,26 @@ public class TabelaVerdade extends OperacoesTabelaVerdade{
         List<String> proposicoes = new ArrayList<>(arvore.variaveis.keySet());
 
         System.out.printf("Total de Proposições: %d\n", totalProposicoes);
+        for (int i = 0; i < totalProposicoes; i++) {
+            String proposicao = proposicoes.get(i);
+            System.out.printf("%s|", proposicao);
+        }
+        System.out.println(expressao);
+
         // Testa todos os casos
         while(!casos.isEmpty()) {
             boolean[] caso = casos.pop();
-            System.out.println("---------");
             for (int i = 0; i < totalProposicoes; i++) {
                 String proposicao = proposicoes.get(i);
                 arvore.variaveis.replace(proposicao, caso[i]);
-                System.out.printf("%s = %b\n", proposicao, caso[i]);
             }
+
             boolean resultado = arvore.calcular();
-            System.out.println(resultado);
+            for (int i = 0; i < totalProposicoes; i++) {
+                String estadoProposicao = caso[i] ? "V" : "F";
+                System.out.printf("%s|", estadoProposicao);
+            }
+            System.out.println(resultado ? "V" : "F");
         }
     }
 

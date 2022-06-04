@@ -80,7 +80,6 @@ public class ArvoreBinariaExpressao {
         lastOperador = null;
 
         Boolean resultado = calculaArvore(raiz);
-        System.out.println(resultado);
         return resultado;
     }
 
@@ -103,7 +102,6 @@ public class ArvoreBinariaExpressao {
                 resultado = TabelaVerdade.apenaSe(a, b);
                 break;
         }
-        System.out.printf("Operacao: %b %s %b = %b\n", a, operacao, b, resultado);
         return resultado;
     }
 
