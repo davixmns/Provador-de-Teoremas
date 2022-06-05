@@ -15,6 +15,7 @@ public class ArvoreBinariaExpressao {
     private No raiz;
     private String lastOperacao;
     private Boolean lastOperador;
+    private Boolean flagOperadorNegacao;
     public Map<String, Boolean> variaveis;
 
     public ArvoreBinariaExpressao(String expressao) {
@@ -59,6 +60,7 @@ public class ArvoreBinariaExpressao {
     private void inicializaVariaveis(String expressaoPosFixa) {
         this.variaveis = new HashMap<String, Boolean>();
         int tamanho = expressaoPosFixa.length();
+        this.flagOperadorNegacao = false;
         for(int i=0; i < tamanho; i++) {
             String caractere = String.valueOf(expressaoPosFixa.charAt(i));
             if(isSimbolo(caractere)) {continue;}
@@ -102,6 +104,13 @@ public class ArvoreBinariaExpressao {
                 resultado = TabelaVerdade.apenaSe(a, b);
                 break;
         }
+
+//        if(!operacao.equals("~")){
+//            System.out.printf("%b %s %b = %b\n", a, operacao, b, resultado);
+//        }else {
+//            System.out.println("Operação utiliza apenas 1 operador");
+//            System.out.printf("%b %s = %b\n", a, operacao, resultado);
+//        }
         return resultado;
     }
 
@@ -116,18 +125,34 @@ public class ArvoreBinariaExpressao {
     private Boolean calculaArvore(No no) {
         if (no != null) {
             calculaArvore(no.getEsquerda());
-
+//            System.out.printf("NO -> GET VALOR -> %s\n", no.getValor());
             if(no.isOperador()) {
-                lastOperacao = no.getValor().toString();
+                String operacao = no.getValor().toString();
+                if(operacao.equals("~")) {
+                    this.flagOperadorNegacao = true;
+                }else {
+                    lastOperacao = operacao;
+                }
             }else {
                 String chave = no.getValor().toString();
                 Boolean valor = variaveis.get(chave);
                 //System.out.printf("Chave[%s] = %d\n", chave, valor);
-                if(lastOperador != null && lastOperacao != null) {
+                if(lastOperador != null && lastOperacao != null && !this.flagOperadorNegacao) {
                     Boolean resultado = calcularOperacao(lastOperador, valor, lastOperacao);
+                    lastOperacao = null;
+                    lastOperador = resultado;
+                }else if(this.flagOperadorNegacao) {
+                    // Calcula negação
+                    Boolean resultado = calcularOperacao(valor, null, "~");
+
+                    // Verifica se possui uma operação anterior à negação
+                    if(lastOperador != null) {
+                        resultado = calcularOperacao(lastOperador, resultado, lastOperacao);
+                    }
 
                     lastOperacao = null;
                     lastOperador = resultado;
+                    this.flagOperadorNegacao = false;
                 }else {
                     lastOperador = valor;
                 }

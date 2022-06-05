@@ -22,6 +22,7 @@ public class TabelaVerdade extends OperacoesTabelaVerdade{
         System.out.println(expressao);
 
         // Testa todos os casos
+        Queue<Boolean> registroResultados = new LinkedList<>();
         while(!casos.isEmpty()) {
             boolean[] caso = casos.pop();
             for (int i = 0; i < totalProposicoes; i++) {
@@ -30,12 +31,31 @@ public class TabelaVerdade extends OperacoesTabelaVerdade{
             }
 
             boolean resultado = arvore.calcular();
+            registroResultados.add(resultado);
             for (int i = 0; i < totalProposicoes; i++) {
                 String estadoProposicao = caso[i] ? "V" : "F";
                 System.out.printf("%s|", estadoProposicao);
             }
             System.out.println(resultado ? "V" : "F");
         }
+
+        // Mostra se é contingência, Tautologia ou Contradição
+        String resultado = "Tautologia";
+        Boolean isContradicao = false;
+        while(!registroResultados.isEmpty()) {
+            Boolean registro = registroResultados.poll();
+
+            if(registro && isContradicao) {
+                resultado = "Contingência";
+                break;
+            }
+            if(!registro) {
+                // É Contradição ou contingência ?
+                isContradicao = true;
+                resultado = "Contradição";
+            }
+        }
+        System.out.printf("A operação: %s é uma %s\n", expressao, resultado.toUpperCase());
     }
 
     public static Stack<boolean[]> getCasosProposicoes(int totalProposicoes) {
