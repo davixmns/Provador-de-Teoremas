@@ -9,6 +9,7 @@ public class TabelaVerdade extends OperacoesTabelaVerdade{
     }
 
     public static void showTabela(String expressao) {
+        expressao = expressao.replace(" ", "");
         ArvoreBinariaExpressao arvore = new ArvoreBinariaExpressao(expressao);
         int totalProposicoes = arvore.variaveis.size();
         Stack<boolean[]> casos = getCasosProposicoes(totalProposicoes);
@@ -42,14 +43,19 @@ public class TabelaVerdade extends OperacoesTabelaVerdade{
         // Mostra se é contingência, Tautologia ou Contradição
         String resultado = "Tautologia";
         Boolean isContradicao = false;
+        Boolean flagVerdade = false;
+        Boolean flagFalse = false;
         while(!registroResultados.isEmpty()) {
             Boolean registro = registroResultados.poll();
+            if(registro)
+                flagVerdade = true;
+            else
+                flagFalse = true;
 
-            if(registro && isContradicao) {
+            if(flagVerdade && flagFalse) {
                 resultado = "Contingência";
                 break;
-            }
-            if(!registro) {
+            }else if(flagVerdade == false && flagFalse == true) {
                 // É Contradição ou contingência ?
                 isContradicao = true;
                 resultado = "Contradição";
