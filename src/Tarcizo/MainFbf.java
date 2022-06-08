@@ -14,10 +14,11 @@ public class MainFbf {
         FBF fbf = new FBF();
 
         System.out.println(formula);
-        System.out.println(fbf.verificaFbf(formula));
-
+        if(fbf.verificaFbf(formula)) System.out.print("Configurada como fbf");
+        else System.out.print("Nao configurada como uma fbf");
     }
 }
+
 
 
 /*
