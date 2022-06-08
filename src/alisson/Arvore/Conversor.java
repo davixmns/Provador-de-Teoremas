@@ -2,14 +2,9 @@ package alisson.Arvore;
 
 import java.util.Stack;
 
-/*
- * https://www.geeksforgeeks.org/stack-set-2-infix-to-postfix/
- * adaptação para lógica proposicional
- */
-
 
 public class Conversor {
-    static int Prec(char ch)
+    static int Prioridade(char ch)
     {
         switch (ch)
         {
@@ -27,57 +22,47 @@ public class Conversor {
         return -1;
     }
 
-    public static String infixToPostfix(String exp)
+    public static String infixParaPosfixa(String exp)
     {
-        // initializing empty String for result
-        String result = new String("");
+        String resultado = new String("");
 
-        // initializing empty stack
-        Stack<Character> stack = new Stack<>();
+        Stack<Character> pilha = new Stack<>();
 
-        for (int i = 0; i<exp.length(); ++i)
-        {
+        for (int i = 0; i<exp.length(); ++i) {
             char c = exp.charAt(i);
 
-            // If the scanned character is an
-            // operand, add it to output.
-            if (Character.isLetterOrDigit(c) && c != 'v')
-                result += c;
-
-                // If the scanned character is an '(',
-                // push it to the stack.
-            else if (c == '(')
-                stack.push(c);
-
-                //  If the scanned character is an ')',
-                // pop and output from the stack
-                // until an '(' is encountered.
-            else if (c == ')')
-            {
-                while (!stack.isEmpty() &&
-                        stack.peek() != '(')
-                    result += stack.pop();
-
-                stack.pop();
+            if (isVariavelOuDigito(c)) {
+                resultado += c;
             }
-            else // an operator is encountered
-            {
-                while (!stack.isEmpty() && Prec(c)
-                        <= Prec(stack.peek())){
-
-                    result += stack.pop();
+            else if (c == '(') {
+                pilha.push(c);
+            }
+            else if (c == ')') {
+                while (!pilha.isEmpty() && pilha.peek() != '(') {
+                    resultado += pilha.pop();
                 }
-                stack.push(c);
+                pilha.pop();
+            }
+            else {
+                // Garante que a pilha conterá apenas os elementos de maior prioridade
+                while (!pilha.isEmpty() && Prioridade(c) <= Prioridade(pilha.peek())){
+                    resultado += pilha.pop();
+                }
+                pilha.push(c);
             }
 
         }
 
-        // pop all the operators from the stack
-        while (!stack.isEmpty()){
-            if(stack.peek() == '(')
-                return "Invalid Expression";
-            result += stack.pop();
+        while (!pilha.isEmpty()){
+            if(pilha.peek() == '(')
+                return "Expressão inválida";
+            // Monta expressão pós-fixa, colocando todos os operadores empilhados
+            resultado += pilha.pop();
         }
-        return result;
+        return resultado;
+    }
+
+    private static boolean isVariavelOuDigito(char c) {
+        return Character.isLetterOrDigit(c) && c != 'v';
     }
 }

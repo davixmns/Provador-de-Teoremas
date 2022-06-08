@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import static alisson.Arvore.Conversor.infixToPostfix;
+import static alisson.Arvore.Conversor.infixParaPosfixa;
 
 public class ArvoreBinariaExpressao {
     private No raiz;
@@ -19,7 +19,7 @@ public class ArvoreBinariaExpressao {
     public Map<String, Boolean> variaveis;
 
     public ArvoreBinariaExpressao(String expressao) {
-        String expressaoPosFixa = infixToPostfix(expressao);
+        String expressaoPosFixa = infixParaPosfixa(expressao);
         inicializaVariaveis(expressaoPosFixa);
         decompoemExpressao(expressaoPosFixa);
     }
