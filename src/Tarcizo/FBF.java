@@ -8,12 +8,16 @@ public class FBF { //ANALISADOR SINTÁTICO
     private List<String> arrayDaFormula;
     private List<String> simbolos;
 
-    public boolean verificaFbf(String formulaRecebida) {
+    public Boolean verificaFbf(String formulaRecebida) {
         this.arrayDaFormula = Arrays.asList(formulaRecebida.replaceAll(" ", "").split("(?!^ )"));
         this.simbolos = List.of("~", "^", "v", "➝", "↔");
 
+
         return verificaParenteses() && verificaSimbolos();
+
     }
+
+
 
     public Boolean verificaParenteses() {
         int abrePrentese = 0;

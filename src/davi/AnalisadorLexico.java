@@ -6,25 +6,18 @@ public class AnalisadorLexico {
     private final List<String> listaDeValidos;
 
     public AnalisadorLexico() {
-        this.listaDeValidos = List.of("~", "^", "v", "->", "<->");
+        this.listaDeValidos = List.of("~", "^", "v", "➝", "↔");
     }
 
     public void verificarInvalidos(String linha){
-        String[] simbolos = linha.split(" ");
+        String[] vetorDeSimbolos = linha.split(" ");
 
         System.out.print("Simbolos invalidos: ");
 
-        for(String simbolo: simbolos){
+        for(String simbolo: vetorDeSimbolos){
             if(!listaDeValidos.contains(simbolo))
                 System.out.print(simbolo + " ");
         }
     }
 
-    public static void main(String[] args) {
-        AnalisadorLexico al = new AnalisadorLexico();
-
-        String teorema = " c -> ( a ^ b ) ";
-
-        al.verificarInvalidos(teorema);
-    }
 }
