@@ -3,10 +3,12 @@ import alisson.TabelaVerdade.TabelaVerdade;
 
 import java.util.Scanner;
 
+// Simbolos
+// ~ ^ v ➝ ↔
+
 public class main {
     public static void main(String[] args) {
         FBF fbf = new FBF();
-
         System.out.print("Expressão: ");
         Scanner scan = new Scanner(System.in);
         String expressao = scan.nextLine();

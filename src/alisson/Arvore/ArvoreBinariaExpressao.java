@@ -74,7 +74,7 @@ public class ArvoreBinariaExpressao {
     }
 
     public void show() {
-        inFixa(raiz);
+        inOrdem(raiz);
     }
 
     public Boolean calcular() {
@@ -114,11 +114,11 @@ public class ArvoreBinariaExpressao {
         return resultado;
     }
 
-    private void inFixa(No no) {
+    private void inOrdem(No no) {
         if (no != null) {
-            inFixa(no.getEsquerda());
+            inOrdem(no.getEsquerda());
             System.out.println(no.getValor());
-            inFixa(no.getDireita());
+            inOrdem(no.getDireita());
         }
     }
 

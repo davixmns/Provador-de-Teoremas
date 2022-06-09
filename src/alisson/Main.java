@@ -1,6 +1,7 @@
 package alisson;
 
 import alisson.Arvore.Conversor;
+import alisson.TabelaVerdade.TabelaVerdade;
 
 // Simbolos
 // ~ ^ v ➝ ↔
@@ -11,8 +12,8 @@ public class Main {
         String expressao = "A^B➝C"; // Exemplo Contingência
 //        String expressao = "~A^A"; // Exemplo Contingência
 
-        //TabelaVerdade.showTabela(expressao);
-        System.out.printf("Expressão infixa \"%s\"\n", expressao);
-        System.out.printf("Pós-fixa \"%s\"\n",Conversor.infixParaPosfixa(expressao.replace(" ", "")));
+        TabelaVerdade.showTabela(expressao);
+//        System.out.printf("Expressão infixa \"%s\"\n", expressao);
+//        System.out.printf("Pós-fixa \"%s\"\n",Conversor.infixParaPosfixa(expressao.replace(" ", "")));
     }
 }
